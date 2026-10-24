@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pengingat Tugas</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="kartu">
+    <header class="kepala">
+      <p class="kicker">Catatan deadline kuliah</p>
+      <h1>Pengingat <span class="sorot">Tugas</span></h1>
+      <p id="ringkasan" class="ringkasan" aria-live="polite"></p>
+    </header>
+
+    <form id="form-tugas" class="form-tugas" novalidate>
+      <div class="bidang bidang-nama">
+        <label for="input-nama">Nama tugas</label>
+        <input
+          type="text"
+          id="input-nama"
+          name="nama"
+          maxlength="80"
+          autocomplete="off"
+          aria-required="true"
+          placeholder="Contoh: Laporan praktikum"
+        >
+      </div>
+
+      <div class="bidang">
+        <label for="input-deadline">Deadline</label>
+        <input
+          type="date"
+          id="input-deadline"
+          name="deadline"
+          aria-required="true"
+        >
+      </div>
+
+      <div class="bidang">
+        <label for="input-mata-kuliah">Mata kuliah (opsional)</label>
+        <select id="input-mata-kuliah" name="mataKuliah">
+          <option value="">Tanpa mata kuliah</option>
+        </select>
+      </div>
+
+      <button type="submit" class="tombol-utama">Tambah</button>
+    </form>
+
+    <p id="pesan-error" class="pesan-error" role="alert"></p>
+
+    <div class="filter" role="group" aria-label="Filter tugas">
+      <button type="button" class="tombol-filter" data-filter="semua" aria-pressed="true">Semua</button>
+      <button type="button" class="tombol-filter" data-filter="belum" aria-pressed="false">Belum selesai</button>
+      <button type="button" class="tombol-filter" data-filter="selesai" aria-pressed="false">Selesai</button>
+    </div>
+
+    <p id="pesan-kosong" class="pesan-kosong"></p>
+    <ul id="daftar-tugas" class="daftar-tugas" aria-label="Daftar tugas"></ul>
+
+    <button id="tombol-hapus-selesai" class="tombol-hapus-semua" type="button" hidden>
+      Hapus semua yang selesai
+    </button>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

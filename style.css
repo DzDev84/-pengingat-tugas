@@ -1,0 +1,753 @@
+/* ===== Token warna dan huruf =====
+   Tema malam: kartu arang gelap dengan benang jahitan terracotta
+   yang menyala lembut, plus aksen krem hangat untuk tombol utama.
+   Warna status tetap dipakai hanya untuk penanda tugas. */
+:root {
+  color-scheme: dark;
+
+  --latar: #131418;
+  --kartu: #1c1f24;
+  --kartu-lembut: #22252b;
+
+  /* Aksen krem sebagai warna aksi utama (kebalikan tema terang). */
+  --tinta: #f1e9da;
+  --tinta-hover: #ffffff;
+  --tinta-teks: #191b1f;
+
+  /* Merah yang tetap terbaca di atas permukaan gelap. */
+  --merah-terang: #ff9d87;
+
+  --benang: rgba(226, 137, 66, 0.42);
+  --benang-tua: #e0863f;
+
+  --teks: #ece7dd;
+  --teks-lembut: #b3aa9a;
+  --teks-samar: #a49b8a;
+
+  --garis: #2d3138;
+  --garis-kuat: #3a3f47;
+  --garis-kontrol: #4d545e;
+
+  --merah: #b3261e;
+  --merah-bg: #fbeae8;
+  --merah-teks: #8f1d17;
+
+  --oranye: #b45c0d;
+  --oranye-bg: #fdf1e3;
+  --oranye-teks: #86450a;
+
+  --hijau: #1c7a4c;
+  --hijau-bg: #eaf7f0;
+  --hijau-teks: #145c39;
+
+  --abu: #667085;
+  --abu-bg: #edf1f6;
+  --abu-teks: #42536a;
+
+  --fokus: #f1e9da;
+
+  --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+    "Liberation Mono", monospace;
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Charter, Georgia,
+    "Times New Roman", serif;
+}
+
+/* ===== Dasar ===== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  padding: 56px 16px 72px;
+  background-color: var(--latar);
+  color: var(--teks);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background-color: #8f4a1d;
+  color: #fff6e8;
+}
+
+/* ===== Kartu utama ===== */
+.kartu {
+  position: relative;
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 32px 34px 28px;
+  background-color: var(--kartu);
+  border: 1px solid var(--garis);
+  border-radius: 18px;
+  box-shadow:
+    0 0 0 1px rgba(226, 137, 66, 0.05),
+    0 30px 60px -30px rgba(0, 0, 0, 0.65);
+}
+
+/* Bingkai jahitan: benang told berwarna tanah di dalam tepi kartu. */
+.kartu::before {
+  content: "";
+  position: absolute;
+  inset: 9px;
+  border: 1.5px dashed var(--benang);
+  border-radius: 12px;
+  pointer-events: none;
+}
+
+/* Isi kartu berada di atas bingkai jahitan. */
+.kepala,
+.form-tugas,
+.pesan-error,
+.filter,
+.pesan-kosong,
+.daftar-tugas,
+.tombol-hapus-semua {
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== Kepala ===== */
+.kepala {
+  margin-bottom: 20px;
+}
+
+.kicker {
+  margin: 0 0 4px;
+  color: var(--benang-tua);
+  font-family: var(--serif);
+  font-size: 0.78rem;
+  font-style: italic;
+  line-height: 1.3;
+}
+
+h1 {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 2.05rem;
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+}
+
+/* Kata terakhir bermiring cara tulis tangan — aksen kecil yang
+   menyenangkan tanpa terlihat seperti decorási template. */
+.sorot {
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.ringkasan {
+  margin: 18px 0 0;
+  padding-top: 14px;
+  border-top: 1px dashed var(--garis-kuat);
+  color: var(--teks-samar);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ===== Form ===== */
+.form-tugas {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr) auto;
+  gap: 12px;
+  align-items: end;
+  padding: 14px;
+  border: 1px solid var(--garis);
+  border-radius: 13px;
+  background-color: var(--kartu-lembut);
+}
+
+/* Nama tugas memakai satu baris penuh karena teksnya paling panjang. */
+.bidang-nama {
+  grid-column: 1 / -1;
+}
+
+.bidang {
+  min-width: 0;
+}
+
+.bidang label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--teks-samar);
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+input[type="text"],
+input[type="date"],
+select {
+  /* Tinggi disamakan agar ketiga kontrol sejajar rapi. */
+  width: 100%;
+  min-width: 0;
+  min-height: 42px;
+  padding: 9px 11px;
+  border: 1px solid var(--garis-kontrol);
+  border-radius: 9px;
+  background-color: #22252b;
+  color: var(--teks);
+  font: inherit;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  transition: border-color 0.15s ease;
+}
+
+input[type="text"]::placeholder {
+  color: #6f7681;
+}
+
+input[type="text"]:hover,
+input[type="date"]:hover,
+select:hover {
+  border-color: #6a7280;
+}
+
+input[type="text"]:focus,
+input[type="date"]:focus,
+select:focus,
+button:focus-visible {
+  outline: 2px solid var(--fokus);
+  outline-offset: 2px;
+  border-color: var(--tinta);
+  background-color: #26292f;
+}
+
+/* Panah select digambar sendiri supaya tampilannya sama di semua browser. */
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 30px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%23a49b8a' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 11px center;
+  cursor: pointer;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+.tombol-utama {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 42px;
+  padding: 9px 17px;
+  border: 1px solid var(--tinta);
+  border-radius: 9px;
+  background-color: var(--tinta);
+  color: var(--tinta-teks);
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.005em;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+/* Tanda plus kecil menandakan aksi menambah, tanpa ikon tambahan. */
+.tombol-utama::before {
+  content: "+";
+  font-size: 0.9375rem;
+  font-weight: 400;
+  line-height: 1;
+  opacity: 0.75;
+}
+
+.tombol-utama:hover {
+  background-color: var(--tinta-hover);
+  border-color: var(--tinta-hover);
+}
+
+.tombol-utama:active {
+  background-color: #ffffff;
+}
+
+/* ===== Pesan error ===== */
+.pesan-error {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+/* Gaya kotak error hanya dipasang saat elemen berisi pesan. */
+.pesan-error:not(:empty) {
+  margin-top: 10px;
+  padding: 9px 12px;
+  border: 1px solid rgba(255, 132, 106, 0.3);
+  border-left: 3px solid var(--merah-terang);
+  border-radius: 9px;
+  background-color: rgba(226, 92, 66, 0.14);
+  color: var(--merah-terang);
+}
+
+/* ===== Filter (kontrol bersegmen) ===== */
+.filter {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  margin-top: 20px;
+  padding: 3px;
+  border: 1px solid var(--garis);
+  border-radius: 10px;
+  background-color: #17191d;
+}
+
+.tombol-filter {
+  padding: 6px 12px;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: var(--teks-samar);
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 500;
+  line-height: 1.5;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.tombol-filter:hover {
+  color: var(--tinta);
+}
+
+.tombol-filter[aria-pressed="true"] {
+  background-color: #2c3037;
+  color: var(--tinta);
+  font-weight: 600;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(241, 233, 218, 0.07);
+}
+
+/* ===== Kondisi kosong ===== */
+.pesan-kosong {
+  margin: 16px 0 0;
+  padding: 26px 16px;
+  border: 1.5px dashed var(--benang);
+  border-radius: 12px;
+  background-color: var(--kartu-lembut);
+  color: var(--teks-lembut);
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  text-align: center;
+}
+
+.pesan-kosong:empty {
+  display: none;
+}
+
+/* ===== Daftar tugas ===== */
+.daftar-tugas {
+  margin: 14px 0 0;
+  padding: 0;
+  border-top: 1px solid var(--garis-kuat);
+  list-style: none;
+}
+
+.daftar-tugas:empty {
+  display: none;
+}
+
+/* Garis kiri status dibuat putus-putus menyerupai jahitan penanda. */
+.item-tugas {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  padding: 15px 12px;
+  border-bottom: 1px solid var(--garis);
+  border-left: 3px dashed #5d6672;
+  transition: background-color 0.15s ease;
+}
+
+.item-tugas:last-child {
+  border-bottom: 0;
+}
+
+.item-tugas:hover {
+  background-color: #212429;
+}
+
+/* Checkbox bulat, seperti tanda pada buku catatan. */
+.kotak-selesai {
+  position: relative;
+  flex: none;
+  width: 19px;
+  height: 19px;
+  margin: 0;
+  border: 1.5px solid #6d7580;
+  border-radius: 50%;
+  background-color: #22252b;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.kotak-selesai:hover {
+  border-color: var(--tinta);
+}
+
+.kotak-selesai:checked {
+  border-color: var(--tinta);
+  background-color: var(--tinta);
+}
+
+/* Centang dibuat dari dua sisi border yang diputar. */
+.kotak-selesai:checked::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 5px;
+  width: 5px;
+  height: 9px;
+  border: solid #17191d;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.isi-tugas {
+  min-width: 0;
+}
+
+.nama-tugas {
+  display: block;
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: -0.005em;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+
+.meta-tugas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px 8px;
+  margin-top: 6px;
+}
+
+.tanggal-tugas {
+  color: var(--teks-samar);
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Untuk tugas yang terlewat, tanggal diberi coretan merah lembut. */
+.status-terlewat .tanggal-tugas {
+  text-decoration: line-through;
+  text-decoration-color: rgba(255, 157, 135, 0.6);
+}
+
+.badge {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  line-height: 1.6;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Titik kecil di dalam badge memperjelas warna status. */
+.badge::before {
+  content: "";
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  margin-right: 5px;
+  border-radius: 50%;
+  background-color: currentColor;
+  vertical-align: 1px;
+}
+
+/* ===== Label mata kuliah =====
+   Warna mata kuliah hanya dipakai di sini agar tidak tertukar dengan
+   warna status yang menandai garis kiri dan badge. */
+.chip-matkul {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  max-width: 100%;
+  padding: 2px 7px 2px 6px;
+  /* Garis putus-putus senada dengan benang jahitan kartu. */
+  border: 1px dashed rgba(241, 233, 218, 0.22);
+  border-radius: 5px;
+  background-color: #26292f;
+  color: #d5dce6;
+  font-size: 0.66rem;
+  font-weight: 500;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.chip-matkul .titik {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #7c3aed;
+}
+
+.chip-matkul .kode-matkul {
+  color: var(--teks-samar);
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.02em;
+}
+
+.mk-1 .titik { background-color: #a78bfa; }
+.mk-1 { background-color: #2a2740; }
+
+.mk-2 .titik { background-color: #5ac8dc; }
+.mk-2 { background-color: #173a41; }
+
+.mk-3 .titik { background-color: #7aa8f7; }
+.mk-3 { background-color: #1d2c4a; }
+
+.mk-4 .titik { background-color: #f2759b; }
+.mk-4 { background-color: #3f2032; }
+
+.mk-5 .titik { background-color: #e77d9e; }
+.mk-5 { background-color: #3c2230; }
+
+.mk-6 .titik { background-color: #4ed0b5; }
+.mk-6 { background-color: #14342e; }
+
+.mk-7 .titik { background-color: #8f9bf5; }
+.mk-7 { background-color: #232647; }
+
+.mk-8 .titik { background-color: #9aa7b8; }
+.mk-8 { background-color: #272b31; }
+
+/* Warna status: garis jahitan kiri item dan badge.
+   Di tema gelap, badge memakai latar transparan dengan teks terang. */
+.status-terlewat {
+  border-left-color: var(--merah-terang);
+}
+
+.status-terlewat .badge {
+  background-color: rgba(255, 122, 96, 0.13);
+  color: #ffb3a0;
+}
+
+.status-mendesak {
+  border-left-color: #e0863f;
+}
+
+.status-mendesak .badge {
+  background-color: rgba(224, 134, 63, 0.14);
+  color: #f0b070;
+}
+
+.status-aman {
+  border-left-color: #4cba85;
+}
+
+.status-aman .badge {
+  background-color: rgba(76, 186, 133, 0.13);
+  color: #7fd6ab;
+}
+
+.status-selesai {
+  border-left-color: #5d6672;
+  background-color: #1f2227;
+}
+
+.status-selesai .badge {
+  background-color: rgba(154, 167, 184, 0.12);
+  color: #a8b3c2;
+}
+
+.status-selesai .nama-tugas {
+  color: var(--teks-lembut);
+  font-weight: 400;
+  text-decoration: line-through;
+  text-decoration-color: #5d6672;
+}
+
+.status-selesai .kotak-selesai:checked {
+  border-color: #5d6672;
+  background-color: #5d6672;
+}
+
+/* Tombol hapus: silang kecil ditambah label "Hapus" agar fungsi tombol
+   jelas. Warna merah baru muncul saat disentuh. Teks tombol sendiri
+   ("Hapus") diturunkan dari JS; silang lewat ::before. */
+.tombol-hapus {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px 8px 3px 6px;
+  border: 1px dashed transparent;
+  border-radius: 7px;
+  background: none;
+  color: var(--teks-samar);
+  font: inherit;
+  font-size: 0.7rem;
+  font-weight: 500;
+  line-height: 1.5;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+/* Silang kecil di depan label untuk mempercepat dikenali. */
+.tombol-hapus::before {
+  content: "×";
+  font-size: 0.85rem;
+  font-weight: 400;
+  line-height: 1;
+  opacity: 0.75;
+}
+
+.tombol-hapus:hover {
+  border-color: rgba(255, 157, 135, 0.35);
+  background-color: rgba(226, 92, 66, 0.14);
+  color: var(--merah-terang);
+}
+
+/* ===== Hapus semua yang selesai ===== */
+.tombol-hapus-semua {
+  width: 100%;
+  margin-top: 18px;
+  padding: 11px 14px;
+  border: 1.5px dashed rgba(255, 157, 135, 0.35);
+  border-radius: 10px;
+  background-color: transparent;
+  color: var(--merah-terang);
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.tombol-hapus-semua:hover {
+  border-color: rgba(255, 157, 135, 0.6);
+  background-color: rgba(226, 92, 66, 0.1);
+}
+
+/* ===== Gerak dimatikan bila pengguna memintanya ===== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+  }
+}
+
+/* ===== Layar kecil ===== */
+@media (max-width: 620px) {
+  body {
+    padding: 18px 14px 36px;
+  }
+
+  .kartu {
+    padding: 22px 17px 19px;
+    border-radius: 14px;
+  }
+
+  .kartu::before {
+    inset: 7px;
+    border-radius: 9px;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+  }
+
+  .ringkasan {
+    margin-top: 15px;
+    padding-top: 12px;
+  }
+
+  .form-tugas {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 12px;
+  }
+
+  input[type="text"],
+  input[type="date"],
+  select {
+    min-height: 44px;
+  }
+
+  .tombol-utama {
+    width: 100%;
+    min-height: 46px;
+  }
+
+  .filter {
+    display: flex;
+    width: 100%;
+    margin-top: 18px;
+  }
+
+  .tombol-filter {
+    flex: 1;
+    padding: 7px 8px;
+    text-align: center;
+  }
+
+  .item-tugas {
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 2px 10px;
+    align-items: start;
+    padding: 13px 11px;
+  }
+
+  .kotak-selesai {
+    margin-top: 2px;
+  }
+
+  .isi-tugas {
+    grid-column: 2;
+  }
+
+  .tombol-hapus {
+    grid-column: 2;
+    justify-self: start;
+    margin-top: 3px;
+  }
+}
